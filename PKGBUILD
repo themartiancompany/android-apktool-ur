@@ -75,6 +75,9 @@ depends=(
 )
 makedepends=(
   "${_java}"
+  # Be careful as gradle 9
+  # may be incompatible
+  # "gradle<9"
   'gradle'
 )
 _tarname="${_Pkg}-${pkgver}"
