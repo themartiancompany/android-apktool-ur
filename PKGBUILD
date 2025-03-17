@@ -26,11 +26,25 @@
 # Maintainer: Muflone http://www.muflone.com/contacts/english/
 # Contributor: navigaid <navigaid@gmail.com>
 
+_java_ver_auto_detect() {
+  local \
+    _ver_rev
+  _ver_rev="$( \
+    pacman \
+      -Qs \
+      openjdk | \
+      grep \
+        "local/openjdk-" | \
+        awk \
+          '{print $2}')"
+  _java_ver="${_ver_rev%-*}"
+}
 _os="$( \
   uname \
     -o)"
-_java_ver="21"
 if [[ "${_os}" == "Android" ]]; then
+  _java_ver="21"
+  _java_ver_auto_detect
   # Termux should really add a provide
   # or make a meta-package.
   # Or me should, I don't know.
@@ -38,7 +52,6 @@ if [[ "${_os}" == "Android" ]]; then
 elif [[ "${_os}" == "GNU/Linux" ]]; then
   _java="java-environment"
 fi
-
 _pkg="apktool"
 _Pkg="Apktool"
 pkgname="android-${_pkg}"
