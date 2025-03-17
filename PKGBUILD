@@ -87,6 +87,10 @@ sha256sums=(
 build() {
   cd \
     "${_tarname}"
+  if [[ "${_os}" == "GNU/Linux" ]]; then
+    export \
+      JAVA_HOME="/usr/lib/jvm/default"
+  fi
   gradle \
     build \
       --no-daemon \
