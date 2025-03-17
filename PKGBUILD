@@ -53,8 +53,10 @@ if [[ "${_os}" == "Android" ]]; then
   # or make a meta-package.
   # Or me should, I don't know.
   _java="opendjk-${_java_majver}"
+  _build="false"
 elif [[ "${_os}" == "GNU/Linux" ]]; then
   _java="java-environment"
+  _build="true"
 fi
 _pkg="apktool"
 _Pkg="Apktool"
@@ -82,42 +84,60 @@ makedepends=(
   'gradle'
 )
 _tarname="${_Pkg}-${pkgver}"
+_tmc_ns="themartiancompany"
+_apktool_commit="82b3a56eb9deeba118a738149177abc54970b546"
+_fur_url="${_http}/${_tmc_ns}/fur/raw${_apktool_commit}"
+_url="${_fur_url}/arch/any/${pkgname}-${pkgver}-${pkgrel}-any.pkg.tar.xz"
+if [[ "${_os}" == "GNU/Linux" ]]; then
+  _src="${_tarname}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz"
+  _sum='1c1ac3add61c5d9043b5efdb228fbd2be7c3bd329bb6ed82228eedacef90bcb9'
+elif [[ "${_os}" == "Android" ]]; then
+  _src="${_tarname}.tar.xz::${_url}"
+  _sum="6eac3efff81c062133078311de478b0bbce2831c374c0f483d5c86ce7b01c231"
+fi
 source=(
-  "${_tarname}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz"
+  "${_src}"
 )
 sha256sums=(
-  '1c1ac3add61c5d9043b5efdb228fbd2be7c3bd329bb6ed82228eedacef90bcb9')
+  "${_sum}"
+)
 
 build() {
-  cd \
-    "${_tarname}"
-  if [[ "${_os}" == "GNU/Linux" ]]; then
-    export \
-      JAVA_HOME="/usr/lib/jvm/default"
+  if [[ "${_build}" == "true" ]]; then
+    cd \
+      "${_tarname}"
+    if [[ "${_os}" == "GNU/Linux" ]]; then
+      export \
+        JAVA_HOME="/usr/lib/jvm/default"
+    fi
+    gradle \
+      build \
+        --no-daemon \
+        shadowJar \
+        proguard
   fi
-  gradle \
-    build \
-      --no-daemon \
-      shadowJar \
-      proguard
 }
 
 package() {
-  cd \
-    "${_tarname}"
-  install \
-    -Dm644 \
-    "brut.${_pkg}/${_pkg}-cli/build/libs/${_pkg}-cli.jar" \
-    "${pkgdir}/usr/share/${pkgname}/${_pkg}.jar"
-  install \
-    -Dm755 \
-    "scripts/linux/${_pkg}" \
-    "${pkgdir}/usr/share/${pkgname}/${_pkg}"
-  install \
-    -dm755 \
-    "${pkgdir}/usr/bin"
-  ln \
-    -s \
-    "/usr/share/${pkgname}/${_pkg}" \
-    "${pkgdir}/usr/bin/${_pkg}"
+  if [[ "${_build}" == "false" ]]; then
+    ls
+  elif [[ "${_build}" == "true" ]]; then
+    cd \
+      "${_tarname}"
+    install \
+      -Dm644 \
+      "brut.${_pkg}/${_pkg}-cli/build/libs/${_pkg}-cli.jar" \
+      "${pkgdir}/usr/share/${pkgname}/${_pkg}.jar"
+    install \
+      -Dm755 \
+      "scripts/linux/${_pkg}" \
+      "${pkgdir}/usr/share/${pkgname}/${_pkg}"
+    install \
+      -dm755 \
+      "${pkgdir}/usr/bin"
+    ln \
+      -s \
+      "/usr/share/${pkgname}/${_pkg}" \
+      "${pkgdir}/usr/bin/${_pkg}"
+  fi
 }
