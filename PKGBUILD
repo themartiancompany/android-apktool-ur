@@ -36,7 +36,7 @@ if [[ "${_os}" == "Android" ]]; then
   # Or me should, I don't know.
   _java="opendjk-${_java_ver}"
 elif [[ "${_os}" == "GNU/Linux" ]]; then
-  _java="java-environment=${_java_ver}"
+  _java="java-environment"
 fi
 
 _pkg="apktool"
