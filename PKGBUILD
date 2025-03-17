@@ -89,7 +89,7 @@ makedepends=(
 _tarname="${_Pkg}-${pkgver}"
 _tmc_ns="themartiancompany"
 _apktool_commit="82b3a56eb9deeba118a738149177abc54970b546"
-_fur_url="${_http}/${_tmc_ns}/fur/raw${_apktool_commit}"
+_fur_url="${_http}/${_tmc_ns}/fur/raw/${_apktool_commit}"
 _url="${_fur_url}/arch/any/${pkgname}-${pkgver}-${pkgrel}-any.pkg.tar.xz"
 if [[ "${_os}" == "GNU/Linux" ]]; then
   _src="${_tarname}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz"
