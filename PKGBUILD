@@ -52,7 +52,7 @@ if [[ "${_os}" == "Android" ]]; then
   # Termux should really add a provide
   # or make a meta-package.
   # Or me should, I don't know.
-  _java="opendjk-${_java_majver}"
+  _java="openjdk-${_java_majver}"
   _build="false"
 elif [[ "${_os}" == "GNU/Linux" ]]; then
   _java="java-environment"
