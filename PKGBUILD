@@ -105,14 +105,28 @@ sha256sums=(
   "${_sum}"
 )
 
+_usr_get() {
+  local \
+    _bin
+  _bin="$( \
+    dirname \
+      "$(command \
+           -v \
+	   "env")")"
+  dirname \
+    "${_bin}"
+}
+
 build() {
+  local \
+    _usr
+  _usr="$( \
+    _usr_get)"
+  export \
+    JAVA_HOME="${_usr}/usr/lib/jvm/default"
   if [[ "${_build}" == "true" ]]; then
     cd \
       "${_tarname}"
-    if [[ "${_os}" == "GNU/Linux" ]]; then
-      export \
-        JAVA_HOME="/usr/lib/jvm/default"
-    fi
     gradle \
       build \
         --no-daemon \
@@ -128,6 +142,8 @@ package() {
       -r \
       "usr" \
       "${pkgdir}"
+    rm \
+      "${pkgdir}/usr/bin/${_pkg}"
   elif [[ "${_build}" == "true" ]]; then
     cd \
       "${_tarname}"
@@ -142,9 +158,9 @@ package() {
     install \
       -dm755 \
       "${pkgdir}/usr/bin"
-    ln \
-      -s \
-      "/usr/share/${pkgname}/${_pkg}" \
-      "${pkgdir}/usr/bin/${_pkg}"
   fi
+  ln \
+    -s \
+    "/usr/share/${pkgname}/${_pkg}" \
+    "${pkgdir}/usr/bin/${_pkg}"
 }
