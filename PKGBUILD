@@ -124,6 +124,10 @@ build() {
 package() {
   if [[ "${_build}" == "false" ]]; then
     ls
+    cp \
+      -r \
+      "usr" \
+      "${pkgdir}"
   elif [[ "${_build}" == "true" ]]; then
     cd \
       "${_tarname}"
