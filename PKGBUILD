@@ -136,6 +136,10 @@ build() {
 }
 
 package() {
+  local \
+    _usr
+  _usr="$( \
+    _usr_get)"
   if [[ "${_build}" == "false" ]]; then
     ls
     cp \
@@ -161,6 +165,6 @@ package() {
   fi
   ln \
     -s \
-    "/usr/share/${pkgname}/${_pkg}" \
+    "${_usr}/share/${pkgname}/${_pkg}" \
     "${pkgdir}/usr/bin/${_pkg}"
 }
