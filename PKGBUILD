@@ -35,20 +35,24 @@ _java_ver_auto_detect() {
       openjdk | \
       grep \
         "local/openjdk-" | \
-        awk \
-          '{print $2}')"
+	head \
+	  -n \
+	    1 | \
+          awk \
+            '{print $2}')"
   _java_ver="${_ver_rev%-*}"
+  _java_majver="${_java_ver%%.}"
 }
 _os="$( \
   uname \
     -o)"
 if [[ "${_os}" == "Android" ]]; then
-  _java_ver="21"
+  _java_majver="21"
   _java_ver_auto_detect
   # Termux should really add a provide
   # or make a meta-package.
   # Or me should, I don't know.
-  _java="opendjk-${_java_ver}"
+  _java="opendjk-${_java_majver}"
 elif [[ "${_os}" == "GNU/Linux" ]]; then
   _java="java-environment"
 fi
