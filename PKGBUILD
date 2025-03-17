@@ -41,7 +41,7 @@ _java_ver_auto_detect() {
           awk \
             '{print $2}')"
   _java_ver="${_ver_rev%-*}"
-  _java_majver="${_java_ver%%*.}"
+  _java_majver="${_java_ver%%.*}"
 }
 _os="$( \
   uname \
