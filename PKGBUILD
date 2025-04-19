@@ -79,6 +79,11 @@ license=(
 depends=(
   "${_java}"
 )
+if [[ "${_os}" == "Android" ]]; then
+  depends+=(
+    "aapt2"
+  )
+fi
 makedepends=(
   "${_java}"
   # Be careful as gradle 9
