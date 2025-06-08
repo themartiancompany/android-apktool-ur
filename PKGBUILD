@@ -65,8 +65,9 @@ pkgver=2.11.1
 pkgrel=1
 _pkgdesc=(
   "A tool for reengineering"
-  "Android apk files"
+  "Android apk files."
 )
+pkgdesc="${_pkgdesc[*]}"
 arch=(
   'any'
 )
